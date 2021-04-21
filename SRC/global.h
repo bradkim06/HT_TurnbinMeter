@@ -261,7 +261,7 @@ typedef struct {
 	u_char start;
 	u_char c_field;
 	u_char a_field;
-	u_char data;
+	u_char on_Hmark;
 	u_char checksum;
 	u_char stop;
 } meter_lcd_set_req_t;

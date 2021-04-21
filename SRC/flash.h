@@ -9,7 +9,7 @@ typedef struct {
 	u_char value[VALUE_DIGIT_LEN]; // ton, liter, cc
 	u_char serial[4];
 	u_char meterType;
-	u_char sleepStatus;
+	u_char isActive;
 	u_int cc;
 	int qtcc;
 	int q2cc;

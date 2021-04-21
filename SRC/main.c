@@ -87,7 +87,7 @@ void set_q3Value()
 	// ภ๛ฟ๋วิ.
 	if (flash.cc < (pMeterInfo->cc / 2) || flash.cc > ((pMeterInfo->cc * 3) / 2)) {
 		flash.cc = pMeterInfo->cc;
-		writeFlash();
+		saveMeterValue();
 	}
 
 	u_int value = flash.cc;
@@ -462,13 +462,16 @@ void checkMessage()
 		}
 	} else if (p->c_field == METER_LCD_SET) { // A7 Set Lcd
 		meter_lcd_set_req_t *pls = (meter_lcd_set_req_t *)rxBuf.buf;
-		if (pls->checksum == (pls->c_field + pls->a_field + pls->data)) {
-			flash.sleepStatus = pls->data;
-			if (pls->data == 0) {
+		if (pls->checksum == (pls->c_field + pls->a_field + pls->on_Hmark)) {
+			if (pls->on_Hmark == 0) {
+				flash.isActive = 1;
 				LCD_TURN_OFF_H();
-			} else if (pls->data == 1) {
+			} else if (pls->on_Hmark == 1) {
+				flash.isActive = 0;
 				LCD_TURN_ON_H();
 			}
+			saveMeterValue();
+			delay_100msec(1);
 		}
 	} else if (p->c_field == SET_SERIAL_NUMBER) { // A0 Set Serial
 		set_serial_number_t *ps = (set_serial_number_t *)&rxBuf.buf;
@@ -572,16 +575,13 @@ void checkMessage()
 				memcpy(flash.value, current.value, VALUE_DIGIT_LEN);
 			}
 
-			if (current.meter_fault == 1) {
-				flash.sleepStatus = 0;
-				current.meter_fault = 0;
-			}
-
-			writeFlash();
+			current.meter_fault = 0;
 		} while (0);
 
+		saveMeterValue();
+		delay_100msec(1);
 		sendMeterStatusResp(errCode);
-		delay_100msec(5);
+		delay_100msec(4);
 
 		if (errCode == ERR_NONE) {
 			REBOOT_SYSTEM();
@@ -624,10 +624,8 @@ void main(void)
 
 	restoreAfterPeriodicReset();
 
-	if (current.meter_fault == 0) {
-		if (flash.sleepStatus) {
-			LCD_TURN_ON_H();
-		}
+	if (flash.isActive == 0) {
+		LCD_TURN_ON_H();
 	}
 	LCD_TURN_ON_M3();
 	LCD_TURN_ON_POINT();
