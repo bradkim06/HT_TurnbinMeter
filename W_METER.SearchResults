@@ -1,0 +1,10 @@
+---- default Matches (9 in 1 files) ----
+Msp430x41x.h (src):#define WDT_MDLY_32         (WDTPW+WDTTMSEL+WDTCNTCL)                         /* 32ms interval (default) */
+Msp430x41x.h (src):#define WDT_MRST_32         (WDTPW+WDTCNTCL)                                  /* 32ms interval (default) */
+Msp430x41x.h (src):#define BT_fCLK2_DIV2       (0x00)                    /* fINT = fCLK2:2 (default) */
+Msp430x41x.h (src):#define BT_fLCD_DIV32       (0x00)                    /* fLCD = fACLK:32 (default) */
+Msp430x41x.h (src):#define BT_fLCD_1K          (0x00)                    /* fACLK:32 (default) */
+Msp430x41x.h (src):#define BT_ADLY_0_064       (0x00)                    /* 0.064ms interval (default) */
+Msp430x41x.h (src):#define LCDSG0              (0x00)                    /* ---------   Port Only (default) */
+Msp430x41x.h (src):#define LCDOG1_7            (0x00)                    /* ---------   Port Only (default) */
+Msp430x41x.h (src):#pragma language=default
