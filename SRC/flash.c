@@ -29,9 +29,10 @@ void erase_sector(char *pDevice)
 
 void write_sector(char *pDevice)
 {
-	erase_sector(pDevice);
-
+	STOP_WATCHDOG();
 	_BIC_SR(GIE); // disable interrupt
+
+	erase_sector(pDevice);
 
 	while (FCTL3 & BUSY)
 		;
@@ -46,6 +47,7 @@ void write_sector(char *pDevice)
 	FCTL3 = FWKEY + LOCK;
 
 	_BIS_SR(GIE); // enable interrupt
+	START_WATCHDOG();
 }
 
 u_char read_sector(char *pDevice)
