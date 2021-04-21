@@ -99,8 +99,6 @@ u_char readFlash()
 
 void saveMeterValue()
 {
-	readFlash();
-
 	memcpy(flash.value, current.value, VALUE_DIGIT_LEN);
 
 	writeFlash();
